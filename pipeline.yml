@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: openwhisk-java-app
+spec:
+  resources:
+    - name: app-git
+      type: git
+  tasks:
+    #####################################################################
+    # Task to Clone Application Source and Run Build Maven
+    - name: run-build-maven
+      taskRef:
+        name: run-maven-against-pom
+      resources:
+        inputs:
+          - name: app-git
+            resource: app-git
+        outputs:
+          - name: app-git
+            resource: app-git
+    - name: verify-jar
+      taskRef:
+        name: list-jar
+      resources:
+        inputs:
+          - name: app-git
+            resource: app-git
+            from:
+              - run-build-maven

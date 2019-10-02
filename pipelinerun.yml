@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: build-java-app-jar
+spec:
+  serviceAccount: default
+  pipelineRef:
+    name: openwhisk-java-app
+  resources:
+    - name: app-git
+      resourceSpec:
+        type: git
+        params:
+          - name: url
+            value: https://github.com/pwplusnick/openwhisk-devtools.git
+          - name: revision
+            value: refs/heads/master
